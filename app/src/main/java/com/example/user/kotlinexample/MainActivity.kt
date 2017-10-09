@@ -10,22 +10,14 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
 
+    var mainViewModel = MainViewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.apply {
-            repositoryName.text = "Medium Android Repository Article"
-            repositoryOwner.text = "Fleka"
-            numberOfStars.text = "1000"
-        }
-
-        var repository = Repository("Medium Android Repository Article",
-                "Fleka", 2000, true)
-
-        Handler().postDelayed({ repository.repositoryName="New Name" }, 2000)
-
+        binding.viewModel = mainViewModel
+        binding.executePendingBindings()
 
     }
-
 }
