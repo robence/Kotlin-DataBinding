@@ -1,22 +1,30 @@
 package com.example.user.kotlinexample
 
-import android.arch.lifecycle.ViewModel
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableField
+import com.example.user.kotlinexample.NetManager
+import com.example.user.kotlinexample.data.GitRepoRepository
+import com.example.user.kotlinexample.data.OnRepositoryReadyCallback
+import com.example.user.kotlinexample.Repository
 
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-class MainViewModel : ViewModel() {
-    var repoModel: RepoModel = RepoModel()
+    var gitRepoRepository: GitRepoRepository = GitRepoRepository(NetManager(getApplication()))
 
-    val text = ObservableField<String>()
+    val text = ObservableField("old data")
 
-    val isLoading = ObservableField<Boolean>()
+    val isLoading = ObservableField(false)
 
-    fun refresh(){
+    var repositories = MutableLiveData<ArrayList<Repository>>()
+
+    fun loadRepositories() {
         isLoading.set(true)
-        repoModel.refreshData(object : OnDataReadyCallback {
-            override fun onDataReady(data: String) {
+        gitRepoRepository.getRepositories(object : OnRepositoryReadyCallback {
+            override fun onDataReady(data: ArrayList<Repository>) {
                 isLoading.set(false)
-                text.set(data)
+                repositories.value = data
             }
         })
     }
