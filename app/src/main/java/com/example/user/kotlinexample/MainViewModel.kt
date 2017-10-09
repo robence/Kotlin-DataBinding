@@ -1,9 +1,10 @@
 package com.example.user.kotlinexample
 
+import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
 
 
-class MainViewModel {
+class MainViewModel : ViewModel() {
     var repoModel: RepoModel = RepoModel()
 
     val text = ObservableField<String>()
